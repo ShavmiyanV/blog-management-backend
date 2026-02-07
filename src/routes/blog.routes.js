@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const authMiddleware = require("../middleware/auth.middleware");
+const adminMiddleware = require("../middleware/admin.middleware");
+const ownerOrAdminMiddleware = require("../middleware/ownerOrAdmin.middleware");
 const {
     createBlog,
     getBlogs,
@@ -19,10 +21,10 @@ router.get("/:id", getBlogById);
 //POST /blogs (Protected)
 router.post("/", authMiddleware, createBlog);
 
-//PUT /blogs/:id (Protected)
-router.put("/:id", authMiddleware, updateBlog);
+//PUT /blogs/:id (Owner OR Admin)
+router.put("/:id", authMiddleware, ownerOrAdminMiddleware, updateBlog);
 
-//DELETE /blogs/:id (Protected)
-router.delete("/:id", authMiddleware, deleteBlog);
+//DELETE /blogs/:id (Admin only)
+router.delete("/:id", authMiddleware, adminMiddleware, deleteBlog);
 
 module.exports = router;

@@ -4,9 +4,14 @@ services:
   app:
     build: .
     ports:
-      - "5000:5000"
-    env_file:
-      - .env
+      - "5001:5001"
+    environment:
+      - PORT=5001
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_NAME=blog_app
+      - JWT_SECRET=your_jwt_secret_key_here
     depends_on:
       - mysql
 
