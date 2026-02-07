@@ -1,31 +1,37 @@
-const getProfile = async (req, res) => {
-  try {
-    const userId = req.user.id;
+const db = require("../config/db");
 
-    const query =
-      "SELECT id, name, email, role, created_at FROM users WHERE id = ?";
+// Get logged-in user profile
+exports.getProfile = async (req, res) => {
+  const userId = req.user.id;
 
-    db.query(query, [userId], (err, results) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ message: "Database error" });
-      }
+  const [rows] = await db.query(
+    "SELECT id, name, email, role FROM users WHERE id = ?",
+    [userId]
+  );
 
-      if (results.length === 0) {
-        return res.status(404).json({ message: "User not found" });
-      }
-
-      res.status(200).json({
-        message: "User profile fetched successfully",
-        user: results[0],
-      });
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
+  res.json(rows[0]);
 };
 
-module.exports = {
-  getProfile,
+// Admin: get all users
+exports.getAllUsers = async (req, res) => {
+  const [users] = await db.query(
+    "SELECT id, name, email, role FROM users"
+  );
+  res.json(users);
+};
+
+// Protected: get user by ID
+exports.getUserById = async (req, res) => {
+  const { id } = req.params;
+
+  const [rows] = await db.query(
+    "SELECT id, name, email, role FROM users WHERE id = ?",
+    [id]
+  );
+
+  if (rows.length === 0) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  res.json(rows[0]);
 };
