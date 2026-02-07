@@ -9,10 +9,8 @@ const {
   getUserById
 } = require("../controllers/user.controller");
 
-// Profile (optional, extra)
 router.get("/profile", authMiddleware, getProfile);
 
-// REQUIRED BY ASSIGNMENT
 router.get("/", authMiddleware, adminMiddleware, getAllUsers);
 router.get("/:id", authMiddleware, getUserById);
 

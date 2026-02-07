@@ -517,10 +517,5 @@ lsof -ti:5001 | xargs kill -9
 ### Unauthorized errors
 - **Solution**: Ensure you're sending the JWT token in the Authorization header as `Bearer <token>`
 
-## 📝 License
-
-ISC
-
 ## 👨‍💻 Author
-
 Shavmiyan V.
